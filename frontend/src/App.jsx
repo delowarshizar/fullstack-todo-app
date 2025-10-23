@@ -18,10 +18,11 @@ function App() {
   const fetchTodos = async () => {
     try {
       const response = await axios.get(API_URL);
-      setTodos(response.data);
+      console.log('Todos:', response.data);
+      setTodos(response.data); // should be an array
       setLoading(false);
-    } catch (error) {
-      console.error('Error fetching todos:', error);
+    } catch (err) {
+      console.error(err);
       setError('Failed to load todos');
       setLoading(false);
     }
@@ -31,8 +32,8 @@ function App() {
     try {
       const response = await axios.post(API_URL, todoData);
       setTodos([response.data, ...todos]);
-    } catch (error) {
-      console.error('Error adding todo:', error);
+    } catch (err) {
+      console.error(err);
       setError('Failed to add todo');
     }
   };
@@ -40,11 +41,9 @@ function App() {
   const updateTodo = async (id, updates) => {
     try {
       const response = await axios.patch(`${API_URL}/${id}`, updates);
-      setTodos(todos.map(todo => 
-        todo._id === id ? response.data : todo
-      ));
-    } catch (error) {
-      console.error('Error updating todo:', error);
+      setTodos(todos.map(todo => todo._id === id ? response.data : todo));
+    } catch (err) {
+      console.error(err);
       setError('Failed to update todo');
     }
   };
@@ -53,19 +52,18 @@ function App() {
     try {
       await axios.delete(`${API_URL}/${id}`);
       setTodos(todos.filter(todo => todo._id !== id));
-    } catch (error) {
-      console.error('Error deleting todo:', error);
+    } catch (err) {
+      console.error(err);
       setError('Failed to delete todo');
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <div className="loading">Loading...</div>;
 
   return (
-    <div className="app-container">
+    <div className="app">
       <h1>📝 Full-Stack Todo App</h1>
-      {error && <p className="error-text">{error}</p>}
-
+      {error && <div className="error">{error}</div>}
       <TodoForm onAdd={addTodo} />
       <TodoList todos={todos} onUpdate={updateTodo} onDelete={deleteTodo} />
     </div>

@@ -14,25 +14,21 @@ function TodoForm({ onAdd }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="todo-form">
+    <form className="todo-form" onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="What needs to be done?"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         required
-        className="todo-input"
       />
       <input
         type="text"
         placeholder="Description (optional)"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        className="todo-input"
       />
-      <button type="submit" className="add-btn">
-        Add Todo
-      </button>
+      <button type="submit">Add Todo</button>
     </form>
   );
 }

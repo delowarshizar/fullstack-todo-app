@@ -1,20 +1,20 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Todo = require('../models/Todo');
+const Todo = require("../models/Todo");
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const todos = await Todo.find().sort({ createdAt: -1 });
-    res.json(todos);
+    res.json(todos); // ✅ Must be an array
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   const todo = new Todo({
     title: req.body.title,
-    description: req.body.description
+    description: req.body.description,
   });
 
   try {
@@ -25,10 +25,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.patch('/:id', async (req, res) => {
+router.patch("/:id", async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
-    if (!todo) return res.status(404).json({ message: 'Todo not found' });
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
 
     if (req.body.title) todo.title = req.body.title;
     if (req.body.description) todo.description = req.body.description;
@@ -41,13 +41,13 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
-    if (!todo) return res.status(404).json({ message: 'Todo not found' });
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
 
     await todo.deleteOne();
-    res.json({ message: 'Todo deleted' });
+    res.json({ message: "Todo deleted" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
