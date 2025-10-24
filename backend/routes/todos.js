@@ -3,25 +3,26 @@ import Todo from "../models/Todo.js";
 
 const router = express.Router();
 
+// ✅ Get all todos
+router.get("/", async (req, res) => {
+  const todos = await Todo.find();
+  res.json(todos);
+});
+
+// ✅ Add a new todo
 router.post("/", async (req, res) => {
   try {
     const { title, description } = req.body;
-
-    if (!title) {
-      return res.status(400).json({ message: "Title is required" });
-    }
-
     const newTodo = new Todo({
       title,
-      description: description || "",
+      description,
       completed: false,
     });
-
-    const savedTodo = await newTodo.save();
-    res.status(201).json(savedTodo);
-  } catch (error) {
-    console.error("Error saving todo:", error);
-    res.status(500).json({ message: "Server error" });
+    const saved = await newTodo.save();
+    res.status(201).json(saved);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error saving todo" });
   }
 });
 
